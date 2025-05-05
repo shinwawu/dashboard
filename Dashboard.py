@@ -4,7 +4,7 @@ import time
 import tkinter as tk
 from tkinter import ttk
 
-# ======== MODEL ========
+#Funcao para ler as estatisticas do CPU e retorna tempos
 def ler_uso_cpu():
     with open("/proc/stat", "r") as f:
         linha = f.readline()
@@ -13,7 +13,7 @@ def ler_uso_cpu():
     tempoparado = cpupartes[3]
     return tempototal, tempoparado
 
-# ======== VIEW ========
+#Interface
 class InterfaceDashboard:
     def __init__(self, root):
         self.root = root
@@ -30,7 +30,7 @@ class InterfaceDashboard:
         self.label_cpu.config(text=f"Uso da CPU: {uso:.2f}%")
         self.progress_cpu["value"] = uso
 
-# ======== CONTROLLER ========
+#Controle das funcoes e do dashboard
 class ControleDashboard:
     def __init__(self, view):
         self.view = view
@@ -51,7 +51,7 @@ class ControleDashboard:
 
             time.sleep(5)
 
-# ======== MAIN ========
+#inicializacao do Gerenciador de Tarefas/Dashboard
 if __name__ == "__main__":
     root = tk.Tk()
     view = InterfaceDashboard(root)
