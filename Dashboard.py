@@ -8,16 +8,15 @@ from tkinter import ttk
 def ler_uso_cpu():
     with open("/proc/stat", "r") as f:
         linha = f.readline()
-    partes = list(map(int, linha.split()[1:]))
-    total = sum(partes)
-    idle = partes[3]
-    return total, idle
+    cpupartes = list(map(int, linha.split()[1:]))
+    tempototal = sum(cpupartes)
+    tempoparado = partes[3]
+    return tempototal, tempoparado
 
-# ======== VIEW ========
-class DashboardView:
+class InterfaceDashboard:
     def __init__(self, root):
         self.root = root
-        self.root.title("Linux Dashboard - Uso da CPU")
+        self.root.title("Dashboard/Gerenciador de Tarefas")
         self.root.geometry("400x150")
 
         self.label_cpu = tk.Label(root, text="Uso da CPU: --%", font=("Arial", 14))
@@ -31,7 +30,7 @@ class DashboardView:
         self.progress_cpu["value"] = uso
 
 # ======== CONTROLLER ========
-class DashboardController:
+class ControleDashboard:
     def __init__(self, view):
         self.view = view
         self.cpu_total_antes, self.cpu_idle_antes = ler_uso_cpu()
@@ -41,10 +40,10 @@ class DashboardController:
 
     def atualizar_periodicamente(self):
         while True:
-            total, idle = ler_uso_cpu()
-            total_diff = total - self.cpu_total_antes
-            idle_diff = idle - self.cpu_idle_antes
-            uso_cpu = 100 * (1 - idle_diff / total_diff) if total_diff > 0 else 0
+            tempototal, tempoparado = ler_uso_cpu()
+            diferenca_tempo = tempototal - self.cpu_total_antes
+            diferenca_parado = tempoparado - self.cpu_idle_antes
+            uso_cpu = 100 * (1 - diferenca_parado / diferenca_tempo) if diferenca_tempo> 0 else 0
             self.cpu_total_antes, self.cpu_idle_antes = total, idle
 
             # Atualiza a interface na thread principal
@@ -55,6 +54,6 @@ class DashboardController:
 # ======== MAIN ========
 if __name__ == "__main__":
     root = tk.Tk()
-    view = DashboardView(root)
-    controller = DashboardController(view)
+    view = InterfaceDashboard(root)
+    controller =ControleDashboard(view)
     root.mainloop()
