@@ -10,9 +10,10 @@ def ler_uso_cpu():
         linha = f.readline()
     cpupartes = list(map(int, linha.split()[1:]))
     tempototal = sum(cpupartes)
-    tempoparado = partes[3]
+    tempoparado = cpupartes[3]
     return tempototal, tempoparado
 
+# ======== VIEW ========
 class InterfaceDashboard:
     def __init__(self, root):
         self.root = root
@@ -33,7 +34,7 @@ class InterfaceDashboard:
 class ControleDashboard:
     def __init__(self, view):
         self.view = view
-        self.cpu_total_antes, self.cpu_idle_antes = ler_uso_cpu()
+        self.cpu_total_antes, self.cpu_parado_antes = ler_uso_cpu()
         self.thread = threading.Thread(target=self.atualizar_periodicamente)
         self.thread.daemon = True
         self.thread.start()
@@ -42,11 +43,10 @@ class ControleDashboard:
         while True:
             tempototal, tempoparado = ler_uso_cpu()
             diferenca_tempo = tempototal - self.cpu_total_antes
-            diferenca_parado = tempoparado - self.cpu_idle_antes
-            uso_cpu = 100 * (1 - diferenca_parado / diferenca_tempo) if diferenca_tempo> 0 else 0
-            self.cpu_total_antes, self.cpu_idle_antes = total, idle
+            diferenca_parado = tempoparado - self.cpu_parado_antes
+            uso_cpu = 100 * (1 - diferenca_parado / diferenca_tempo) if diferenca_tempo > 0 else 0
+            self.cpu_total_antes, self.cpu_parado_antes = tempototal, tempoparado
 
-            # Atualiza a interface na thread principal
             self.view.root.after(0, self.view.atualizar_cpu, uso_cpu)
 
             time.sleep(5)
@@ -55,5 +55,5 @@ class ControleDashboard:
 if __name__ == "__main__":
     root = tk.Tk()
     view = InterfaceDashboard(root)
-    controller =ControleDashboard(view)
+    controller = ControleDashboard(view)
     root.mainloop()
