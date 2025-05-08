@@ -24,6 +24,6 @@ class ControleDashboard:
             
             self.CPUtotal_tempoanterior, self.CPUparado_tempoanterior = tempototal, tempoparado
 
-            self.Interface.Dashboard.after(0, self.Interface.CPU_atualizacao, CPU_uso)
+            self.Interface.Dashboard.after(0, self.Interface.CPU_atualizacao, CPU_uso, 100 - CPU_uso)
             time.sleep(5)
 
