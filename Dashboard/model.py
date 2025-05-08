@@ -3,8 +3,8 @@
 
 
 def LeituraCPU():
-    with open("/proc/stat", "r") as f:
-        linha = f.readline()
+    with open("/proc/stat", "r") as cpu:
+        linha = cpu.readline()
     cpupartes = list(map(int, linha.split()[1:]))
     tempototal = sum(cpupartes)
     tempoparado = cpupartes[3]
