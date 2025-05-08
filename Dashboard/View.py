@@ -22,7 +22,7 @@ class InterfaceDashboard:
 
     def CPU_atualizacao(self, uso, ocioso):
         self.CPULegenda.config(text=f"Uso da CPU: {uso:.2f}%")
-        self.CPUtempoparado.config(text=f"Uso da CPU: {uso:.2f}%")
+        self.CPUtempoparado.config(text=f"Tempo Ocioso: {ocioso:.2f}%")
         
         self.CPUuso_lista.append(uso)
         self.CPUuso_lista.pop(0)
