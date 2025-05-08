@@ -27,10 +27,6 @@ class InterfaceDashboard:
     def CPU_atualizacao(self, uso, ocioso,processos=None,threads=None):
         self.CPULegenda.config(text=f"Uso da CPU: {uso:.2f}%")
         self.CPUtempoparado.config(text=f"Tempo Ocioso: {ocioso:.2f}%")
-        if processos is not None:
-            self.Processos_total.config(text=f"Processos: {processos}")
-        if threads is not None:
-            self.Threads_total.config(text=f"Threads: {threads}")
 
         self.CPUuso_lista.append(uso)
         self.CPUuso_lista.pop(0)
@@ -43,4 +39,10 @@ class InterfaceDashboard:
             x2 = i * (largura / len(self.CPUuso_lista))
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura)
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=4)
+
+    def ProcessosThreads_atualizacao(self, processos= None,threads=None):
+         if processos is not None:
+            self.Processos_total.config(text=f"Processos: {processos}")
+        if threads is not None:
+            self.Threads_total.config(text=f"Threads: {threads}")
 
