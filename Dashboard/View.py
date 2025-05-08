@@ -41,7 +41,7 @@ class InterfaceDashboard:
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=4)
 
     def ProcessosThreads_atualizacao(self, processos= None,threads=None):
-         if processos is not None:
+        if processos is not None:
             self.Processos_total.config(text=f"Processos: {processos}")
         if threads is not None:
             self.Threads_total.config(text=f"Threads: {threads}")
