@@ -12,12 +12,17 @@ class InterfaceDashboard:
         self.CPULegenda = tk.Label(Dashboard, text="Uso da CPU: --%", font=("Arial", 14))
         self.CPULegenda.pack(pady=10)
 
+        self.CPUtempoparado = tk.Label(Dashboard, text="Tempo ocioso: --%", font=("Arial", 12))
+        self.CPUtempoparado.pack(pady=5)
+
+        
         self.GraficoCPU = tk.Canvas(Dashboard, width=800, height=200, bg="gray")
         self.GraficoCPU.pack(pady=10)
         self.CPUuso_lista = [0] * 100
 
     def CPU_atualizacao(self, uso):
         self.CPULegenda.config(text=f"Uso da CPU: {uso:.2f}%")
+        self.CPUtempoparado.config(text=f"Uso da CPU: {uso:.2f}%")
         
         self.CPUuso_lista.append(uso)
         self.CPUuso_lista.pop(0)
