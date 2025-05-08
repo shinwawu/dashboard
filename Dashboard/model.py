@@ -1,6 +1,6 @@
 # Como estamos utilizando modelo MVC, estaremos encapsulando para melhor visualizacao
 # aqui vai ser a parte Model, onde le dados
-
+import os
 
 def LeituraCPU():
     with open("/proc/stat", "r") as cpu:
