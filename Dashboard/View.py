@@ -20,7 +20,7 @@ class InterfaceDashboard:
         self.GraficoCPU.pack(pady=10)
         self.CPUuso_lista = [0] * 100
 
-    def CPU_atualizacao(self, uso):
+    def CPU_atualizacao(self, uso, ocioso):
         self.CPULegenda.config(text=f"Uso da CPU: {uso:.2f}%")
         self.CPUtempoparado.config(text=f"Uso da CPU: {uso:.2f}%")
         
