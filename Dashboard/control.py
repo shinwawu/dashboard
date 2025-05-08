@@ -10,11 +10,15 @@ class ControleDashboard:
         self.Interface = Interface
         self.CPUtotal_tempoanterior, self.CPUparado_tempoanterior = LeituraCPU()
 
-        self.thread = threading.Thread(target=self.atualizacao_continua)
-        self.thread.daemon = True
-        self.thread.start()
+        self.CPUthread = threading.Thread(target=self.CPUatualizacao_continua)
+        self.CPUthread.daemon = True
+        self.CPUthread.start()
 
-    def atualizacao_continua(self):
+        self.Processo_Threads_thread = threading.Thread(target=self.Processos_Threads_atualizacao_continua)
+        self.Processo_Threads_thread.daemon = True
+        self.Processo_Threads_thread.start()
+
+    def CPUatualizacao_continua(self):
         while True:
             tempototal, tempoparado = LeituraCPU()
             diferenca_tempo = tempototal - self.CPUtotal_tempoanterior
@@ -25,5 +29,12 @@ class ControleDashboard:
             self.CPUtotal_tempoanterior, self.CPUparado_tempoanterior = tempototal, tempoparado
 
             self.Interface.Dashboard.after(0, self.Interface.CPU_atualizacao, CPU_uso, 100 - CPU_uso)
+            time.sleep(5)
+
+    def Processos_Threads_atualizacao_continua(self):
+        while True:
+            processos, threads = Quantidade_Processos_Threads()
+
+            self.Interface.Dashboard.after(0, self.ProcessosThreads_atualizacao, processos, threads)
             time.sleep(5)
 
