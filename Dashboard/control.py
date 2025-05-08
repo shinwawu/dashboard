@@ -3,7 +3,7 @@
 
 import threading
 import time
-from model import LeituraCPU
+from model import LeituraCPU, Quantidade_Processos_Threads
 
 class ControleDashboard:
     def __init__(self, Interface):
