@@ -35,6 +35,6 @@ class ControleDashboard:
         while True:
             processos, threads = Quantidade_Processos_Threads()
 
-            self.Interface.Dashboard.after(0, self.ProcessosThreads_atualizacao, processos, threads)
+            self.Interface.Dashboard.after(0, self.Interface.ProcessosThreads_atualizacao, processos, threads)
             time.sleep(5)
 
