@@ -3,8 +3,6 @@ import threading
 import time
 import tkinter as tk
 from tkinter import ttk
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
 
 # ======== MODEL ========
 def LeituraCPU():
@@ -28,29 +26,29 @@ class InterfaceDashboard:
         self.progress_cpu = ttk.Progressbar(root, orient="horizontal", length=300, mode="determinate")
         self.progress_cpu.pack(pady=10)
 
-        # Gráfico com matplotlib
-        self.fig = Figure(figsize=(8, 3), dpi=100)
-        self.ax = self.fig.add_subplot(111)
-        self.ax.set_title("Gráfico de Uso da CPU")
-        self.ax.set_xlabel("Tempo")
-        self.ax.set_ylabel("% Uso")
-        self.cpu_uso_lista = [0] * 30
-        self.line, = self.ax.plot(self.cpu_uso_lista, color='blue')
-
-        self.canvas = FigureCanvasTkAgg(self.fig, master=root)
-        self.canvas.draw()
-        self.canvas.get_tk_widget().pack(pady=10)
+        # Canvas para gráfico manual
+        self.canvas = tk.Canvas(root, width=800, height=200, bg="black")
+        self.canvas.pack(pady=10)
+        self.cpu_uso_lista = [0] * 100  # 100 pontos no gráfico
 
     def atualizar_cpu(self, uso):
         self.label_cpu.config(text=f"Uso da CPU: {uso:.2f}%")
         self.progress_cpu["value"] = uso
 
-        # Atualiza o gráfico
+        # Atualiza os dados
         self.cpu_uso_lista.append(uso)
         self.cpu_uso_lista.pop(0)
-        self.line.set_ydata(self.cpu_uso_lista)
-        self.ax.set_ylim(0, 100)
-        self.canvas.draw()
+
+        # Redesenha o gráfico
+        self.canvas.delete("all")
+        h = 200
+        w = 800
+        for i in range(1, len(self.cpu_uso_lista)):
+            x1 = (i - 1) * (w / len(self.cpu_uso_lista))
+            y1 = h - (self.cpu_uso_lista[i - 1] / 100 * h)
+            x2 = i * (w / len(self.cpu_uso_lista))
+            y2 = h - (self.cpu_uso_lista[i] / 100 * h)
+            self.canvas.create_line(x1, y1, x2, y2, fill="lime", width=2)
 
 # ======== CONTROLLER ========
 class ControleDashboard:
