@@ -23,6 +23,6 @@ def Quantidade_Processos_Threads():
                         if linha.startswith("Threads:"):
                             threads += int(linha.split()[1])
                             break
-            except:
-                continue
+            except FileNotFoundError:
+                continue  
     return processos, threads
