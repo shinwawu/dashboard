@@ -15,15 +15,23 @@ class InterfaceDashboard:
         self.CPUtempoparado = tk.Label(Dashboard, text="Tempo ocioso: --%", font=("Arial", 12))
         self.CPUtempoparado.pack(pady=5)
 
+        self.Processos_total = tk.Label(Dashboard, text="Processos: --", font=("Arial", 12))
+        self.Threads_total = tk.Label(Dashboard, text="Threads: --", font=("Arial", 12))
+        self.Processos_total.pack(pady=2)
+        self.Threads_total.pack(pady=2)
         
         self.GraficoCPU = tk.Canvas(Dashboard, width=800, height=200, bg="gray")
         self.GraficoCPU.pack(pady=10)
         self.CPUuso_lista = [0] * 100
 
-    def CPU_atualizacao(self, uso, ocioso):
+    def CPU_atualizacao(self, uso, ocioso,processos=None,threads=None):
         self.CPULegenda.config(text=f"Uso da CPU: {uso:.2f}%")
         self.CPUtempoparado.config(text=f"Tempo Ocioso: {ocioso:.2f}%")
-        
+        if processos is not None:
+            self.Processos_total.config(text=f"Processos: {processos}")
+        if threads is not None:
+            self.Threads_total.config(text=f"Threads: {threads}")
+
         self.CPUuso_lista.append(uso)
         self.CPUuso_lista.pop(0)
         self.GraficoCPU.delete("all")
