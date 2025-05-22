@@ -5,7 +5,6 @@ Atua como uma camada de abstração para ler e processar informações do sistem
 """
 
 import os
-import pwd
 from typing import Dict, List, Tuple, Optional
 
 # Importação dos modelos de dados utilizados pelo monitor
