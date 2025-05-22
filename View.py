@@ -52,7 +52,7 @@ class InterfaceDashboard:
         self.GraficoMemoria.grid(row=1, column=0)
 
         # Gráfico de barra da Memória usada
-        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=150, height=150, bg="dark gray")
+        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=200, height=150, bg="dark gray")
         self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
         self.MEMuso_lista = [0] * 100
 
