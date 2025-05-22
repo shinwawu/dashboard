@@ -10,10 +10,11 @@ class InterfaceDashboard:
         #Aqui abre janela
         self.Dashboard.title("Dashboard/Gerenciador de Tarefas")
         self.Dashboard.geometry("1100x650")
-        #Controllerf com intervalo de 5 segundos
+        #Controller com intervalo de 5 segundos
         self.controller = SystemMonitorController(update_interval_sec=5)
         self.controller.start()
 
+        #Aqui ele cria aba, uma para geral e outra para lista de processos
         self.abas = ttk.Notebook(self.Dashboard)
         self.aba_geral = ttk.Frame(self.abas)
         self.aba_processos = ttk.Frame(self.abas)
@@ -21,11 +22,12 @@ class InterfaceDashboard:
         self.abas.add(self.aba_processos, text="Processos")
         self.abas.pack(expand=1, fill="both")
 
-        self.interface_aba_geral()
+        self.interface_aba_geral()  
         self.interface_processos_aba()
         self.atualizacao_interface()
 
     def interface_aba_geral(self):
+        #aqui ele cria os textos de informacao da CPU, Memoria, swap, total de processos e threads
         self.cpu_uso = tk.Label(self.aba_geral, text="Uso da CPU: --%", font=("Arial", 14))
         self.cpu_uso.pack(pady=5)
         self.cpu_parado = tk.Label(self.aba_geral, text="Tempo ocioso: --%", font=("Arial", 12))
@@ -46,21 +48,31 @@ class InterfaceDashboard:
         self.CPUuso_lista = [0] * 100
 
     def interface_processos_aba(self):
+        #funcao para montar lista de processos e mostrar na aba de processos e informar umas informacoes basicas
         self.listaprocessos = ttk.Treeview(self.aba_processos, columns=("PID", "User", "CPU", "Mem", "Cmd"), show='headings')
         for col in self.listaprocessos["columns"]:
             self.listaprocessos.heading(col, text=col)
             self.listaprocessos.column(col, width=150 if col != "Cmd" else 300, anchor='center')
         self.listaprocessos.pack(expand=True, fill="both")
 
-        self.btn_detalhes = tk.Button(self.listaprocessos, text="Ver Detalhes do Processo", command=self.ver_detalhes)
+        #botao para ver detalhe
+        self.btn_detalhes = tk.Button(self.aba_processos, text="Ver Detalhes do Processo", command=self.ver_detalhes)
         self.btn_detalhes.pack(pady=10)
 
-    def CPU_atualizacao(self, uso, ocioso):
-        self.cpu_uso.config(text=f"Uso da CPU: {uso:.2f}%")
-        self.cpu_parado.config(text=f"Tempo ocioso: {ocioso:.2f}%")
-        self.CPUuso_lista.append(uso)
+    def atualizacao_interface(self):
+        info = self.controller.get_system_global_info()
+        processos = self.controller.get_all_processes()
+
+        self.cpu_uso.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
+        self.cpu_parado.config(text=f"Tempo ocioso: {info.cpu_idle_percent:.2f}%")
+        self.CPUuso_lista.append(info.cpu_usage_percent)
         self.CPUuso_lista.pop(0)
         self.GraficoCPU.delete("all")
+        self.memo_uso.config(text=f"Uso de Memoria: {info.mem_used_percent:.2f}%")
+        self.swap_uso.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
+        self.processos_num.config(text=f"Total de Processos: {info.total_processes}")
+        self.threads_num.config(text=f"Total de Threads: {info.total_threads}")
+        
         altura = 100
         largura = 400
         for i in range(1, len(self.CPUuso_lista)):
@@ -70,15 +82,6 @@ class InterfaceDashboard:
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura)
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=2)
 
-    def atualizacao_interface(self):
-        info = self.controller.get_system_global_info()
-        processos = self.controller.get_all_processes()
-
-        self.CPU_atualizacao(info.cpu_usage_percent, info.cpu_idle_percent)
-        self.memo_uso.config(text=f"Uso de Memoria: {info.mem_used_percent:.2f}%")
-        self.swap_uso.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
-        self.processos_num.config(text=f"Total de Processos: {info.total_processes}")
-        self.threads_num.config(text=f"Total de Threads: {info.total_threads}")
 
         for i in self.listaprocessos.get_children():
             self.listaprocessos.delete(i)
@@ -87,7 +90,7 @@ class InterfaceDashboard:
                 proc.pid, proc.user, f"{proc.cpu_percent:.2f}%", f"{proc.mem_percent:.2f}%", proc.cmdline[:80]
             ))
 
-        self.Dashboard.after(5000, self.refresh_view)
+        self.Dashboard.after(5000, self.atualizacao_interface)
 
     def ver_detalhes(self):
         selected = self.listaprocessos.selection()
