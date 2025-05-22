@@ -100,6 +100,26 @@ class InterfaceDashboard:
 
         altura = 150
         largura = 400
+        intervalo_atualizacao = 5  # segundos
+
+        # -------------------- GRÁFICO CPU --------------------
+        self.GraficoCPU.delete("all")
+
+        # Eixo Y (0% a 100%)
+        for i in range(0, 101, 20):
+            y = altura - (i / 100 * altura)
+            self.GraficoCPU.create_line(0, y, largura, y, fill="lightgray", dash=(2, 2))
+            self.GraficoCPU.create_text(5, y, text=f"{i}%", anchor="w", fill="white", font=("Arial", 8))
+
+        # Eixo X (tempo: 0s a 500s)
+        for i in range(0, 101, 10):  # 10 pontos = 50s
+            x = i * (largura / 100)
+            tempo_seg = (100 - i) * intervalo_atualizacao
+            self.GraficoCPU.create_line(x, 0, x, altura, fill="lightgray", dash=(2, 2))
+            if tempo_seg % 25 == 0:  # marcação a cada 25s
+                self.GraficoCPU.create_text(x, altura - 2, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+
+        # Linhas do gráfico
         for i in range(1, len(self.CPUuso_lista)):
             x1 = (i - 1) * (largura / len(self.CPUuso_lista))
             y1 = altura - (self.CPUuso_lista[i - 1] / 100 * altura)
@@ -107,13 +127,31 @@ class InterfaceDashboard:
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura)
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=2)
 
+        # -------------------- GRÁFICO MEMÓRIA --------------------
         self.GraficoMemoria.delete("all")
+
+        # Eixo Y (0% a 100%)
+        for i in range(0, 101, 20):
+            y = altura - (i / 100 * altura)
+            self.GraficoMemoria.create_line(0, y, largura, y, fill="lightgray", dash=(2, 2))
+            self.GraficoMemoria.create_text(5, y, text=f"{i}%", anchor="w", fill="white", font=("Arial", 8))
+
+        # Eixo X (tempo: 0s a 500s)
+        for i in range(0, 101, 10):
+            x = i * (largura / 100)
+            tempo_seg = (100 - i) * intervalo_atualizacao
+            self.GraficoMemoria.create_line(x, 0, x, altura, fill="lightgray", dash=(2, 2))
+            if tempo_seg % 25 == 0:
+                self.GraficoMemoria.create_text(x, altura - 2, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+
+        # Linhas do gráfico
         for i in range(1, len(self.MEMuso_lista)):
             x1 = (i - 1) * (largura / len(self.MEMuso_lista))
             y1 = altura - (self.MEMuso_lista[i - 1] / 100 * altura)
             x2 = i * (largura / len(self.MEMuso_lista))
             y2 = altura - (self.MEMuso_lista[i] / 100 * altura)
             self.GraficoMemoria.create_line(x1, y1, x2, y2, fill="green", width=2)
+
             
         for i in self.listaprocessos.get_children():
             self.listaprocessos.delete(i)
