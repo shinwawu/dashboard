@@ -544,21 +544,14 @@ def populate_system_global_data(system_info_instance: SystemGlobalInfo) -> None:
 
 
 def get_username_from_uid(uid: int) -> str:
-    """Converte um UID numérico para o nome de usuário correspondente.
-
-    Args:
-        uid (int): ID de usuário (UID) a ser convertido.
-
-    Returns:
-        str: Nome do usuário correspondente ao UID ou o próprio UID como string
-             se não for possível obter o nome.
-    """
+    """Obtém o nome do usuário a partir do UID lendo /etc/passwd diretamente."""
     try:
-        # Usa o módulo pwd para obter informações do usuário pelo UID
-        return pwd.getpwuid(uid).pw_name
-    except KeyError:
-        # UID não encontrado no sistema
-        return str(uid)
+        with open("/etc/passwd", "r") as f:
+            for line in f:
+                parts = line.split(":")
+                if len(parts) >= 3 and parts[2].isdigit() and int(parts[2]) == uid:
+                    return parts[0]  # Nome do usuário
     except Exception:
-        # Outros erros ao obter nome de usuário
-        return str(uid)
+        pass
+    return str(uid)  # Se não encontrar, retorna o UID como string
+
