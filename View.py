@@ -36,7 +36,7 @@ class InterfaceDashboard:
         frame_grafico.pack(side="left", fill="y", padx=10)
 
         #Gráfico da CPU
-        tk.Label(frame_grafico, text="Uso da CPU : ", font=("Arial", 12, "bold")).pack()
+        tk.Label(frame_grafico, text="Uso da CPU", font=("Arial", 12, "bold"), width=50, anchor="center").pack()
         self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=200, bg="dark gray")
         self.GraficoCPU.pack(pady=(0, 10))
         self.CPUuso_lista = [0] * 100 
@@ -47,11 +47,12 @@ class InterfaceDashboard:
         frame_memoria.pack()
 
         # Gráfico da Memória
-        tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2)
+        tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, sticky="ew")
         self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=150, bg="dark gray")
         self.GraficoMemoria.grid(row=1, column=0)
 
         # Gráfico de barra da Memória usada
+        tk.Label(frame_memoria, text="Memória Usada", font=("Arial", 12, "bold")).grid(row=0, column=1)
         self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=400, height=150, bg="dark gray")
         self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
         self.MEMuso_lista = [0] * 100
@@ -137,7 +138,7 @@ class InterfaceDashboard:
             y1 = altura - (self.CPUuso_lista[i - 1] / 100 * altura) + margem_y
             x2 = margem_x + i * ((largura - margem_x) / len(self.CPUuso_lista))
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura) + margem_y
-            self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=2)
+            self.GraficoCPU.create_line(x1, y1, x2, y2, fill="light blue", width=2)
 
         # grafico memoria
         self.GraficoMemoria.delete("all")
@@ -160,7 +161,7 @@ class InterfaceDashboard:
             y1 = altura - (self.MEMuso_lista[i - 1] / 100 * altura) + margem_y
             x2 = margem_x + i * ((largura - margem_x) / len(self.MEMuso_lista))
             y2 = altura - (self.MEMuso_lista[i] / 100 * altura) + margem_y
-            self.GraficoMemoria.create_line(x1, y1, x2, y2, fill="green", width=2)
+            self.GraficoMemoria.create_line(x1, y1, x2, y2, fill="light green", width=2)
 
         # grafico memoria usada
        
@@ -195,7 +196,7 @@ class InterfaceDashboard:
         elif mem_percent >= 70:
             cor = "orange"
         else:
-            cor = "blue"
+            cor = "light blue"
 
         self.GraficoBarraMemoria.create_rectangle(x_centro, y0,x_centro + largura_barra, altura_barra,fill=cor)
 
