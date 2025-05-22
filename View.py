@@ -15,7 +15,7 @@ class InterfaceDashboard:
         self.tabs = ttk.Notebook(master)
         self.tab_global = ttk.Frame(self.tabs)
         self.tab_processos = ttk.Frame(self.tabs)
-        self.tabs.add(self.tab_global, text="Visão Global")
+        self.tabs.add(self.tab_global, text="Visao Global")
         self.tabs.add(self.tab_processos, text="Processos")
         self.tabs.pack(expand=1, fill="both")
 
@@ -29,7 +29,7 @@ class InterfaceDashboard:
         self.lbl_idle = tk.Label(self.tab_global, text="Tempo ocioso: --%", font=("Arial", 12))
         self.lbl_idle.pack()
 
-        self.lbl_mem = tk.Label(self.tab_global, text="Uso de Memória: --%", font=("Arial", 12))
+        self.lbl_mem = tk.Label(self.tab_global, text="Uso de Memoria: --%", font=("Arial", 12))
         self.lbl_mem.pack()
         self.lbl_swap = tk.Label(self.tab_global, text="Uso de Swap: --%", font=("Arial", 12))
         self.lbl_swap.pack()
@@ -55,7 +55,7 @@ class InterfaceDashboard:
 
         self.lbl_cpu.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
         self.lbl_idle.config(text=f"Tempo ocioso: {info.cpu_idle_percent:.2f}%")
-        self.lbl_mem.config(text=f"Uso de Memória: {info.mem_used_percent:.2f}%")
+        self.lbl_mem.config(text=f"Uso de Memoria: {info.mem_used_percent:.2f}%")
         self.lbl_swap.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
         self.lbl_proc.config(text=f"Total de Processos: {info.total_processes}")
         self.lbl_threads.config(text=f"Total de Threads: {info.total_threads}")
@@ -72,7 +72,7 @@ class InterfaceDashboard:
     def ver_detalhes(self):
         selected = self.tree.selection()
         if not selected:
-            messagebox.showwarning("Seleção", "Selecione um processo na lista.")
+            messagebox.showwarning("Selecao", "Selecione um processo na lista.")
             return
 
         pid = int(self.tree.item(selected[0], "values")[0])
@@ -83,9 +83,9 @@ class InterfaceDashboard:
         detalhes_win.title(f"Detalhes do Processo PID {pid}")
         detalhes_win.geometry("600x400")
 
-        tk.Label(detalhes_win, text=f"Usuário: {proc.user}").pack()
+        tk.Label(detalhes_win, text=f"Usuario: {proc.user}").pack()
         tk.Label(detalhes_win, text=f"CPU %: {proc.cpu_percent:.2f} | Mem %: {proc.mem_percent:.2f}").pack()
-        tk.Label(detalhes_win, text=f"Início: {proc.start_time_str}").pack()
+        tk.Label(detalhes_win, text=f"Inicio: {proc.start_time_str}").pack()
         tk.Label(detalhes_win, text=f"Comando: {proc.cmdline}").pack()
 
         tk.Label(detalhes_win, text=f"Threads:").pack(pady=5)
