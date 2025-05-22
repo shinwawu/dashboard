@@ -121,7 +121,7 @@ class InterfaceDashboard:
             tempo_seg = (100 - i) * intervalo_atualizacao
             self.GraficoCPU.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
             if tempo_seg % 25 == 0:
-                self.GraficoCPU.create_text(x, altura + margem_y - 2, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+                self.GraficoCPU.create_text(x, altura + margem_y + 10, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
         for i in range(1, len(self.CPUuso_lista)):
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.CPUuso_lista))
             y1 = altura - (self.CPUuso_lista[i - 1] / 100 * altura) + margem_y
@@ -140,7 +140,7 @@ class InterfaceDashboard:
             tempo_seg = (100 - i) * intervalo_atualizacao
             self.GraficoMemoria.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
             if tempo_seg % 25 == 0:
-                self.GraficoMemoria.create_text(x, altura + margem_y - 2, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+                self.GraficoCPU.create_text(x, altura + margem_y + 10, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
         for i in range(1, len(self.MEMuso_lista)):
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.MEMuso_lista))
             y1 = altura - (self.MEMuso_lista[i - 1] / 100 * altura) + margem_y
