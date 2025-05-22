@@ -198,7 +198,7 @@ class InterfaceDashboard:
 
 
         # Rótulo de texto
-        texto_mem = f"{mem_usada_gb:.1f} GB / {mem_total_gb:.1f} GB"
+        texto_mem = f"{mem_usada_mb:.1f} MB / {mem_total_mb:.1f} MB"
         self.GraficoBarraMemoria.create_text(40, 10, text=texto_mem, fill="white", font=("Arial", 8), anchor="n")
 
         
