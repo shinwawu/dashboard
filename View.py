@@ -43,7 +43,7 @@ class InterfaceDashboard:
         self.threads_num = tk.Label(self.aba_geral, text="Total de Threads: --", font=("Arial", 12))
         self.threads_num.pack()
 
-        self.GraficoCPU = tk.Canvas(self.aba_geral, width=300, height=150, bg="gray")
+        self.GraficoCPU = tk.Canvas(self.aba_geral, width=400, height=150, bg="gray")
         self.GraficoCPU.pack(pady=10)
         self.CPUuso_lista = [0] * 100
 
@@ -73,7 +73,7 @@ class InterfaceDashboard:
         self.processos_num.config(text=f"Total de Processos: {info.total_processes}")
         self.threads_num.config(text=f"Total de Threads: {info.total_threads}")
         
-        altura = 100
+        altura = 150
         largura = 400
         for i in range(1, len(self.CPUuso_lista)):
             x1 = (i - 1) * (largura / len(self.CPUuso_lista))
