@@ -106,7 +106,7 @@ class InterfaceDashboard:
         print("CPU:", info.cpu_usage_percent)
         print("Mem:", info.mem_used_percent)
 
-        altura = 150
+        altura = 200
         largura = 400
         intervalo_atualizacao = 5  # segundos
 
