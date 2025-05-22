@@ -48,7 +48,7 @@ class InterfaceDashboard:
 
         # Gráfico da Memória
         tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2)
-        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=150, bg="gray")
+        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=150, bg="dark gray")
         self.GraficoMemoria.grid(row=1, column=0)
 
         # Gráfico de barra da Memória usada
@@ -195,7 +195,7 @@ class InterfaceDashboard:
         elif mem_percent >= 70:
             cor = "orange"
         else:
-            cor = "green"
+            cor = "blue"
 
         self.GraficoBarraMemoria.create_rectangle(x_centro, y0,x_centro + largura_barra, altura_barra,fill=cor)
 
