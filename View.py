@@ -37,13 +37,13 @@ class InterfaceDashboard:
 
         # Gráfico da CPU
         tk.Label(frame_grafico, text="Uso da CPU : ", font=("Arial", 12, "bold")).pack()
-        self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=150, bg="dark gray")
+        self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=200, bg="dark gray")
         self.GraficoCPU.pack(pady=(0, 10))
         self.CPUuso_lista = [0] * 100 
 
         # Gráfico da Memória
         tk.Label(frame_grafico, text="Uso da Memória : ", font=("Arial", 12, "bold")).pack()
-        self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=150, bg="dark gray")
+        self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=200, bg="dark gray")
         self.GraficoMemoria.pack()
         self.MEMuso_lista = [0] * 100
 
@@ -98,7 +98,7 @@ class InterfaceDashboard:
         print("CPU:", info.cpu_usage_percent)
         print("Mem:", info.mem_used_percent)
 
-        altura = 150
+        altura = 200
         largura = 400
         intervalo_atualizacao = 5  # segundos
 
