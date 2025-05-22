@@ -50,12 +50,12 @@ class InterfaceDashboard:
 
         # Gráfico da Memória
         tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, sticky="n")
-        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=150, bg="dark gray")
+        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=200, bg="dark gray")
         self.GraficoMemoria.grid(row=1, column=0)
 
         # Gráfico de barra da Memória usada
         tk.Label(frame_memoria, text="Memória Usada", font=("Arial", 12, "bold")).grid(row=0, column=1, sticky="n")
-        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=200, height=150, bg="dark gray")
+        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=200, height=200, bg="dark gray")
         self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
         self.MEMuso_lista = [0] * 100
 
@@ -177,7 +177,7 @@ class InterfaceDashboard:
         mem_total_mb = mem_total_kb / 1024
 
         # Altura total do canvas
-        altura_barra = 150
+        altura_barra = 170
 
         canvas_largura = 200
         largura_barra = 70
