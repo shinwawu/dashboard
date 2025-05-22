@@ -52,7 +52,7 @@ class InterfaceDashboard:
         self.GraficoMemoria.grid(row=1, column=0)
 
         # Gráfico de barra da Memória usada
-        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=60, height=150, bg="black")
+        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=80, height=200, bg="black")
         self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
         self.MEMuso_lista = [0] * 100
 
@@ -173,11 +173,10 @@ class InterfaceDashboard:
         mem_total_mb = mem_total_kb / 1024
 
         # Altura total do canvas
-        altura_barra = 150
-        largura_barra = 40
+        altura_barra = 200
 
-        canvas_largura = 60
-        largura_barra = 40
+        canvas_largura = 80
+        largura_barra = 50
         x_centro = (canvas_largura - largura_barra) / 2  # Centraliza a barra no Canvas
         # Altura proporcional usada
         if mem_total_mb > 0:
