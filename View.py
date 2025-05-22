@@ -9,7 +9,7 @@ class InterfaceDashboard:
         self.master.title("Dashboard/Gerenciador de Tarefas")
         self.master.geometry("1100x650")
 
-        self.controller = SystemMonitorController(update_interval_sec=5)
+        self.controller = SystemMonitorController(update_interval_sec=2)
         self.controller.start()
 
         self.tabs = ttk.Notebook(master)
@@ -39,6 +39,10 @@ class InterfaceDashboard:
         self.lbl_threads = tk.Label(self.tab_global, text="Total de Threads: --", font=("Arial", 12))
         self.lbl_threads.pack()
 
+        self.GraficoCPU = tk.Canvas(self.tab_global, width=900, height=200, bg="gray")
+        self.GraficoCPU.pack(pady=10)
+        self.CPUuso_lista = [0] * 100
+
     def setup_processos_tab(self):
         self.tree = ttk.Treeview(self.tab_processos, columns=("PID", "User", "CPU", "Mem", "Cmd"), show='headings')
         for col in self.tree["columns"]:
@@ -49,12 +53,26 @@ class InterfaceDashboard:
         self.btn_detalhes = tk.Button(self.tab_processos, text="Ver Detalhes do Processo", command=self.ver_detalhes)
         self.btn_detalhes.pack(pady=10)
 
+    def CPU_atualizacao(self, uso, ocioso):
+        self.lbl_cpu.config(text=f"Uso da CPU: {uso:.2f}%")
+        self.lbl_idle.config(text=f"Tempo ocioso: {ocioso:.2f}%")
+        self.CPUuso_lista.append(uso)
+        self.CPUuso_lista.pop(0)
+        self.GraficoCPU.delete("all")
+        altura = 200
+        largura = 900
+        for i in range(1, len(self.CPUuso_lista)):
+            x1 = (i - 1) * (largura / len(self.CPUuso_lista))
+            y1 = altura - (self.CPUuso_lista[i - 1] / 100 * altura)
+            x2 = i * (largura / len(self.CPUuso_lista))
+            y2 = altura - (self.CPUuso_lista[i] / 100 * altura)
+            self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=2)
+
     def refresh_view(self):
         info = self.controller.get_system_global_info()
         processos = self.controller.get_all_processes()
 
-        self.lbl_cpu.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
-        self.lbl_idle.config(text=f"Tempo ocioso: {info.cpu_idle_percent:.2f}%")
+        self.CPU_atualizacao(info.cpu_usage_percent, info.cpu_idle_percent)
         self.lbl_mem.config(text=f"Uso de Memoria: {info.mem_used_percent:.2f}%")
         self.lbl_swap.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
         self.lbl_proc.config(text=f"Total de Processos: {info.total_processes}")
@@ -67,7 +85,7 @@ class InterfaceDashboard:
                 proc.pid, proc.user, f"{proc.cpu_percent:.2f}%", f"{proc.mem_percent:.2f}%", proc.cmdline[:80]
             ))
 
-        self.master.after(5000, self.refresh_view)
+        self.master.after(2000, self.refresh_view)
 
     def ver_detalhes(self):
         selected = self.tree.selection()
