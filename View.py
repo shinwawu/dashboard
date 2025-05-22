@@ -36,14 +36,16 @@ class InterfaceDashboard:
         frame_grafico.pack(side="left", fill="y", padx=10)
 
         # Gráfico da CPU
-        self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=150, bg="gray")
+        tk.Label(frame_grafico, text="Uso da CPU : ", font=("Arial", 12, "bold")).pack()
+        self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=150, bg="dark gray")
         self.GraficoCPU.pack(pady=(0, 10))
-        self.CPUuso_lista = [0] * 100
+        self.CPUuso_lista = [] 
 
         # Gráfico da Memória
-        self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=150, bg="gray")
+        tk.Label(frame_grafico, text="Uso da Memória : ", font=("Arial", 12, "bold")).pack()
+        self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=150, bg="dark gray")
         self.GraficoMemoria.pack()
-        self.MEMuso_lista = [0] * 100
+        self.MEMuso_lista = []
 
         # Frame para as informações à direita
         frame_info = tk.Frame(frame_principal)
