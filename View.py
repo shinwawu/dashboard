@@ -27,13 +27,15 @@ class InterfaceDashboard:
         self.atualizacao_interface()
 
     def interface_aba_geral(self):
-        #Criacao de um frame (area) para elementos visuais
         frame_principal = tk.Frame(self.aba_geral)
         frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
 
-        #Frame para os gráficos à esquerda
+        # Gráficos e informações lado a lado usando grid
         frame_grafico = tk.Frame(frame_principal)
-        frame_grafico.pack(side="left", fill="y", padx=10)
+        frame_grafico.grid(row=0, column=0, sticky="n")
+
+        frame_info = tk.Frame(frame_principal)
+        frame_info.grid(row=0, column=1, sticky="n")
 
         #Gráfico da CPU
         tk.Label(frame_grafico, text="Uso da CPU", font=("Arial", 12, "bold"), width=50, anchor="center").pack()
@@ -47,19 +49,15 @@ class InterfaceDashboard:
         frame_memoria.pack()
 
         # Gráfico da Memória
-        tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, sticky="ew")
+        tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, sticky="n")
         self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=150, bg="dark gray")
         self.GraficoMemoria.grid(row=1, column=0)
 
         # Gráfico de barra da Memória usada
-        tk.Label(frame_memoria, text="Memória Usada", font=("Arial", 12, "bold")).grid(row=0, column=1)
+        tk.Label(frame_memoria, text="Memória Usada", font=("Arial", 12, "bold")).grid(row=0, column=1, sticky="n")
         self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=200, height=150, bg="dark gray")
         self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
         self.MEMuso_lista = [0] * 100
-
-        # Frame para as informações à direita
-        frame_info = tk.Frame(frame_principal)
-        frame_info.pack(side="left", fill="both", expand=True)
 
         self.cpu_uso = tk.Label(frame_info, text="Uso da CPU: --%", font=("Arial", 14))
         self.cpu_uso.pack(pady=5)
