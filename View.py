@@ -38,7 +38,7 @@ class InterfaceDashboard:
         frame_info.grid(row=0, column=1, sticky="n")
 
         #Gráfico da CPU
-        tk.Label(frame_grafico, text="Uso da CPU", font=("Arial", 12, "bold"), width=50, anchor="center").pack()
+        tk.Label(frame_grafico, text="Uso da CPU", font=("Arial", 12, "bold")).pack()
         self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=200, bg="dark gray")
         self.GraficoCPU.pack(pady=(0, 10))
         self.CPUuso_lista = [0] * 100 
