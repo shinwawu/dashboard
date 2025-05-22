@@ -27,15 +27,15 @@ class InterfaceDashboard:
         self.atualizacao_interface()
 
     def interface_aba_geral(self):
-        # Frame principal da aba
+        #Criacao de um frame (area) para elementos visuais
         frame_principal = tk.Frame(self.aba_geral)
         frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # Frame para os gráficos à esquerda
+        #Frame para os gráficos à esquerda
         frame_grafico = tk.Frame(frame_principal)
         frame_grafico.pack(side="left", fill="y", padx=10)
 
-        # Gráfico da CPU
+        #Gráfico da CPU
         tk.Label(frame_grafico, text="Uso da CPU : ", font=("Arial", 12, "bold")).pack()
         self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=200, bg="dark gray")
         self.GraficoCPU.pack(pady=(0, 10))
@@ -176,6 +176,9 @@ class InterfaceDashboard:
         altura_barra = 150
         largura_barra = 40
 
+        canvas_largura = 60
+        largura_barra = 40
+        x_centro = (canvas_largura - largura_barra) / 2  # Centraliza a barra no Canvas
         # Altura proporcional usada
         if mem_total_mb > 0:
             altura_usada = (mem_usada_mb / mem_total_mb) * altura_barra
@@ -183,6 +186,7 @@ class InterfaceDashboard:
             altura_usada = 0  # ou altura_barra para indicar uso total como fallback
 
         y0 = altura_barra - altura_usada
+
 
         # Desenha barra preenchida
         # Escolhe cor baseada no percentual
@@ -194,12 +198,12 @@ class InterfaceDashboard:
         else:
             cor = "green"
 
-        self.GraficoBarraMemoria.create_rectangle(10, y0, 10 + largura_barra, altura_barra, fill=cor)
+        self.GraficoBarraMemoria.create_rectangle(x_centro, y0,x_centro + largura_barra, altura_barra,fill=cor)
 
 
         # Rótulo de texto
         texto_mem = f"{mem_usada_mb:.1f} MB / {mem_total_mb:.1f} MB"
-        self.GraficoBarraMemoria.create_text(40, 10, text=texto_mem, fill="white", font=("Arial", 8), anchor="n")
+        self.GraficoBarraMemoria.create_text(canvas_largura / 2, 5, text=texto_mem,fill="white",font=("Arial", 8),anchor="n")
 
         
             
