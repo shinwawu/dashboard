@@ -166,13 +166,11 @@ class InterfaceDashboard:
        
        
         self.GraficoBarraMemoria.delete("all")
-        # Pegando valores absolutos de memória
-        mem_usada_mb = info.mem_used_mb  # precisa estar disponível no seu controller
-        mem_total_mb = info.mem_total_mb
+        mem_usada_kb = info.mem_used_kb
+        mem_total_kb = info.mem_total_kb
 
-        # Converte para GB (opcional, arredondado a 1 casa)
-        mem_usada_gb = mem_usada_mb / 1024
-        mem_total_gb = mem_total_mb / 1024
+        mem_usada_mb = mem_usada_kb / 1024
+        mem_total_mb = mem_total_kb / 1024
 
         # Altura total do canvas
         altura_barra = 150
