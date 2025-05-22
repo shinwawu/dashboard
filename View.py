@@ -177,11 +177,25 @@ class InterfaceDashboard:
         largura_barra = 40
 
         # Altura proporcional usada
-        altura_usada = (mem_usada_mb / mem_total_mb) * altura_barra
+        if mem_total_mb > 0:
+            altura_usada = (mem_usada_mb / mem_total_mb) * altura_barra
+        else:
+            altura_usada = 0  # ou altura_barra para indicar uso total como fallback
+
         y0 = altura_barra - altura_usada
 
         # Desenha barra preenchida
-        self.GraficoBarraMemoria.create_rectangle(10, y0, 10 + largura_barra, altura_barra, fill="green")
+        # Escolhe cor baseada no percentual
+        mem_percent = info.mem_used_percent
+        if mem_percent >= 90:
+            cor = "red"
+        elif mem_percent >= 70:
+            cor = "orange"
+        else:
+            cor = "green"
+
+        self.GraficoBarraMemoria.create_rectangle(10, y0, 10 + largura_barra, altura_barra, fill=cor)
+
 
         # Rótulo de texto
         texto_mem = f"{mem_usada_gb:.1f} GB / {mem_total_gb:.1f} GB"
