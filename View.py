@@ -98,41 +98,30 @@ class InterfaceDashboard:
         self.CPUuso_lista.pop(0)
         self.MEMuso_lista.append(info.mem_used_percent)
         self.MEMuso_lista.pop(0)
-        self.GraficoCPU.delete("all")
         self.memo_uso.config(text=f"Uso de Memoria: {info.mem_used_percent:.2f}%")
         self.swap_uso.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
         self.processos_num.config(text=f"Total de Processos: {info.total_processes}")
         self.threads_num.config(text=f"Total de Threads: {info.total_threads}")
-        print("CPU:", info.cpu_usage_percent)
-        print("Mem:", info.mem_used_percent)
 
         altura = 200
         largura = 400
-        intervalo_atualizacao = 5  # segundos
+        intervalo_atualizacao = 5
 
-        margem_x = 30  # margem esquerda
-        margem_y = 10  # margem superior e inferior
+        margem_x = 30
+        margem_y = 10
 
-        # grafico cpu
+        # === GRÁFICO DA CPU ===
         self.GraficoCPU.delete("all")
-
-        # Eixo Y (0% a 100%)
         for i in range(0, 101, 20):
             y = altura - (i / 100 * altura) + margem_y
-            if i == 0:
-                y -= 5  # empurra o 0% para cima
             self.GraficoCPU.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
             self.GraficoCPU.create_text(margem_x - 5, y, text=f"{i}%", anchor="e", fill="white", font=("Arial", 8))
-
-        # Eixo X (tempo: 0s a 500s)
         for i in range(0, 101, 10):
             x = margem_x + i * ((largura - margem_x) / 100)
             tempo_seg = (100 - i) * intervalo_atualizacao
             self.GraficoCPU.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
             if tempo_seg % 25 == 0:
-                self.GraficoCPU.create_text(x, altura + margem_y + 10, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
-
-        # Linhas do gráfico da CPU
+                self.GraficoCPU.create_text(x, altura + margem_y - 2, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
         for i in range(1, len(self.CPUuso_lista)):
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.CPUuso_lista))
             y1 = altura - (self.CPUuso_lista[i - 1] / 100 * altura) + margem_y
@@ -140,28 +129,18 @@ class InterfaceDashboard:
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura) + margem_y
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="light blue", width=2)
 
-        # grafico memoria
-
-
+        # === GRÁFICO DA MEMÓRIA ===
         self.GraficoMemoria.delete("all")
-        # Eixo Y (0% a 100%)
         for i in range(0, 101, 20):
             y = altura - (i / 100 * altura) + margem_y
-                if i == 0:
-                    y -= 5  # empurra o 0% para cima
             self.GraficoMemoria.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
-            self.GraficoMemoria.create_text(margem_x - 5, y,text=f"{i}%",anchor="e",fill="white",font=("Arial", 8))
-
-        # Eixo X (tempo decrescente de 500s até 0s, marcações a cada 25s)
+            self.GraficoMemoria.create_text(margem_x - 5, y, text=f"{i}%", anchor="e", fill="white", font=("Arial", 8))
         for i in range(0, 101, 10):
             x = margem_x + i * ((largura - margem_x) / 100)
             tempo_seg = (100 - i) * intervalo_atualizacao
             self.GraficoMemoria.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
             if tempo_seg % 25 == 0:
-                self.GraficoMemoria.create_text(x, altura + margem_y - 5, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
-
-
-        # linhas do gráfico de memória
+                self.GraficoMemoria.create_text(x, altura + margem_y - 2, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
         for i in range(1, len(self.MEMuso_lista)):
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.MEMuso_lista))
             y1 = altura - (self.MEMuso_lista[i - 1] / 100 * altura) + margem_y
