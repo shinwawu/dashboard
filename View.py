@@ -86,6 +86,8 @@ class InterfaceDashboard:
         self.cpu_parado.config(text=f"Tempo ocioso: {info.cpu_idle_percent:.2f}%")
         self.CPUuso_lista.append(info.cpu_usage_percent)
         self.CPUuso_lista.pop(0)
+        self.MEMuso_lista.append(info.mem_used_percent)
+        self.MEMuso_lista.pop(0)
         self.GraficoCPU.delete("all")
         self.memo_uso.config(text=f"Uso de Memoria: {info.mem_used_percent:.2f}%")
         self.swap_uso.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
@@ -101,7 +103,14 @@ class InterfaceDashboard:
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura)
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=2)
 
-
+        self.GraficoMemoria.delete("all")
+        for i in range(1, len(self.MEMuso_lista)):
+            x1 = (i - 1) * (largura / len(self.MEMuso_lista))
+            y1 = altura - (self.MEMuso_lista[i - 1] / 100 * altura)
+            x2 = i * (largura / len(self.MEMuso_lista))
+            y2 = altura - (self.MEMuso_lista[i] / 100 * altura)
+            self.GraficoMemoria.create_line(x1, y1, x2, y2, fill="green", width=2)
+            
         for i in self.listaprocessos.get_children():
             self.listaprocessos.delete(i)
         for proc in sorted(processos, key=lambda p: p.cpu_percent, reverse=True):
