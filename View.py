@@ -41,10 +41,19 @@ class InterfaceDashboard:
         self.GraficoCPU.pack(pady=(0, 10))
         self.CPUuso_lista = [0] * 100 
 
+
+        # Frame horizontal para o gráfico de memória e barra de memória total
+        frame_memoria = tk.Frame(frame_grafico)
+        frame_memoria.pack()
+
         # Gráfico da Memória
-        tk.Label(frame_grafico, text="Uso da Memória : ", font=("Arial", 12, "bold")).pack()
-        self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=200, bg="dark gray")
-        self.GraficoMemoria.pack()
+        tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2)
+        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=150, bg="gray")
+        self.GraficoMemoria.grid(row=1, column=0)
+
+        # Gráfico de barra da Memória usada
+        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=60, height=150, bg="black")
+        self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
         self.MEMuso_lista = [0] * 100
 
         # Frame para as informações à direita
@@ -105,7 +114,7 @@ class InterfaceDashboard:
         margem_x = 30  # margem esquerda
         margem_y = 10  # margem superior e inferior
 
-        # -------------------- GRÁFICO CPU --------------------
+        # grafico cpu
         self.GraficoCPU.delete("all")
 
         # Eixo Y (0% a 100%)
@@ -130,7 +139,7 @@ class InterfaceDashboard:
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura) + margem_y
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="blue", width=2)
 
-        # -------------------- GRÁFICO MEMÓRIA --------------------
+        # grafico memoria
         self.GraficoMemoria.delete("all")
 
         for i in range(0, 101, 20):
@@ -153,7 +162,34 @@ class InterfaceDashboard:
             y2 = altura - (self.MEMuso_lista[i] / 100 * altura) + margem_y
             self.GraficoMemoria.create_line(x1, y1, x2, y2, fill="green", width=2)
 
+        # grafico memoria usada
+       
+       
+        self.GraficoBarraMemoria.delete("all")
+        # Pegando valores absolutos de memória
+        mem_usada_mb = info.mem_used_mb  # precisa estar disponível no seu controller
+        mem_total_mb = info.mem_total_mb
 
+        # Converte para GB (opcional, arredondado a 1 casa)
+        mem_usada_gb = mem_usada_mb / 1024
+        mem_total_gb = mem_total_mb / 1024
+
+        # Altura total do canvas
+        altura_barra = 150
+        largura_barra = 40
+
+        # Altura proporcional usada
+        altura_usada = (mem_usada_mb / mem_total_mb) * altura_barra
+        y0 = altura_barra - altura_usada
+
+        # Desenha barra preenchida
+        self.GraficoBarraMemoria.create_rectangle(10, y0, 10 + largura_barra, altura_barra, fill="green")
+
+        # Rótulo de texto
+        texto_mem = f"{mem_usada_gb:.1f} GB / {mem_total_gb:.1f} GB"
+        self.GraficoBarraMemoria.create_text(40, 10, text=texto_mem, fill="white", font=("Arial", 8), anchor="n")
+
+        
             
         for i in self.listaprocessos.get_children():
             self.listaprocessos.delete(i)
