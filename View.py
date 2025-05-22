@@ -31,12 +31,19 @@ class InterfaceDashboard:
         frame_principal = tk.Frame(self.aba_geral)
         frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # Frame para o gráfico à esquerda
+        # Frame para os gráficos à esquerda
         frame_grafico = tk.Frame(frame_principal)
         frame_grafico.pack(side="left", fill="y", padx=10)
 
+        # Gráfico da CPU
         self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=150, bg="gray")
-        self.GraficoCPU.pack()
+        self.GraficoCPU.pack(pady=(0, 10))
+        self.CPUuso_lista = [0] * 100
+
+        # Gráfico da Memória
+        self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=150, bg="gray")
+        self.GraficoMemoria.pack()
+        self.MEMuso_lista = [0] * 100
 
         # Frame para as informações à direita
         frame_info = tk.Frame(frame_principal)
@@ -57,7 +64,6 @@ class InterfaceDashboard:
         self.threads_num = tk.Label(frame_info, text="Total de Threads: --", font=("Arial", 12))
         self.threads_num.pack()
 
-        self.CPUuso_lista = [0] * 100
 
 
     def interface_processos_aba(self):
