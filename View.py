@@ -27,25 +27,38 @@ class InterfaceDashboard:
         self.atualizacao_interface()
 
     def interface_aba_geral(self):
-        #aqui ele cria os textos de informacao da CPU, Memoria, swap, total de processos e threads
-        self.cpu_uso = tk.Label(self.aba_geral, text="Uso da CPU: --%", font=("Arial", 14))
+        # Frame principal da aba
+        frame_principal = tk.Frame(self.aba_geral)
+        frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # Frame para o gráfico à esquerda
+        frame_grafico = tk.Frame(frame_principal)
+        frame_grafico.pack(side="left", fill="y", padx=10)
+
+        self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=150, bg="gray")
+        self.GraficoCPU.pack()
+
+        # Frame para as informações à direita
+        frame_info = tk.Frame(frame_principal)
+        frame_info.pack(side="left", fill="both", expand=True)
+
+        self.cpu_uso = tk.Label(frame_info, text="Uso da CPU: --%", font=("Arial", 14))
         self.cpu_uso.pack(pady=5)
-        self.cpu_parado = tk.Label(self.aba_geral, text="Tempo ocioso: --%", font=("Arial", 12))
+        self.cpu_parado = tk.Label(frame_info, text="Tempo ocioso: --%", font=("Arial", 12))
         self.cpu_parado.pack()
 
-        self.memo_uso = tk.Label(self.aba_geral, text="Uso de Memoria: --%", font=("Arial", 12))
+        self.memo_uso = tk.Label(frame_info, text="Uso de Memoria: --%", font=("Arial", 12))
         self.memo_uso.pack()
-        self.swap_uso = tk.Label(self.aba_geral, text="Uso de Swap: --%", font=("Arial", 12))
+        self.swap_uso = tk.Label(frame_info, text="Uso de Swap: --%", font=("Arial", 12))
         self.swap_uso.pack()
 
-        self.processos_num = tk.Label(self.aba_geral, text="Total de Processos: --", font=("Arial", 12))
+        self.processos_num = tk.Label(frame_info, text="Total de Processos: --", font=("Arial", 12))
         self.processos_num.pack()
-        self.threads_num = tk.Label(self.aba_geral, text="Total de Threads: --", font=("Arial", 12))
+        self.threads_num = tk.Label(frame_info, text="Total de Threads: --", font=("Arial", 12))
         self.threads_num.pack()
 
-        self.GraficoCPU = tk.Canvas(self.aba_geral, width=400, height=150, bg="gray")
-        self.GraficoCPU.pack(pady=10)
         self.CPUuso_lista = [0] * 100
+
 
     def interface_processos_aba(self):
         #funcao para montar lista de processos e mostrar na aba de processos e informar umas informacoes basicas
