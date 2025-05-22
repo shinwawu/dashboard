@@ -103,7 +103,7 @@ class InterfaceDashboard:
         self.processos_num.config(text=f"Total de Processos: {info.total_processes}")
         self.threads_num.config(text=f"Total de Threads: {info.total_threads}")
 
-        altura = 200
+        altura = 230
         largura = 400
         intervalo_atualizacao = 5
 
