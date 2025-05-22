@@ -93,7 +93,9 @@ class InterfaceDashboard:
         self.swap_uso.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
         self.processos_num.config(text=f"Total de Processos: {info.total_processes}")
         self.threads_num.config(text=f"Total de Threads: {info.total_threads}")
-        
+        print("CPU:", info.cpu_usage_percent)
+        print("Mem:", info.mem_used_percent)
+
         altura = 150
         largura = 400
         for i in range(1, len(self.CPUuso_lista)):
