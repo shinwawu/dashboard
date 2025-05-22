@@ -9,7 +9,7 @@ class InterfaceDashboard:
         self.master.title("Dashboard/Gerenciador de Tarefas")
         self.master.geometry("1100x650")
 
-        self.controller = SystemMonitorController(update_interval_sec=2)
+        self.controller = SystemMonitorController(update_interval_sec=5)
         self.controller.start()
 
         self.tabs = ttk.Notebook(master)
@@ -67,7 +67,7 @@ class InterfaceDashboard:
                 proc.pid, proc.user, f"{proc.cpu_percent:.2f}%", f"{proc.mem_percent:.2f}%", proc.cmdline[:80]
             ))
 
-        self.master.after(2000, self.refresh_view)
+        self.master.after(5000, self.refresh_view)
 
     def ver_detalhes(self):
         selected = self.tree.selection()
