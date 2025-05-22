@@ -119,8 +119,8 @@ class InterfaceDashboard:
         # Eixo Y (0% a 100%)
         for i in range(0, 101, 20):
             y = altura - (i / 100 * altura) + margem_y
-                if i == 0:
-                    y -= 5  # empurra o 0% para cima
+            if i == 0:
+                y -= 5  # empurra o 0% para cima
             self.GraficoCPU.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
             self.GraficoCPU.create_text(margem_x - 5, y, text=f"{i}%", anchor="e", fill="white", font=("Arial", 8))
 
