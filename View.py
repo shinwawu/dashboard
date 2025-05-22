@@ -39,7 +39,7 @@ class InterfaceDashboard:
 
         #Gráfico da CPU
         tk.Label(frame_grafico, text="Uso da CPU", font=("Arial", 12, "bold")).pack()
-        self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=200, bg="dark gray")
+        self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=230, bg="dark gray")
         self.GraficoCPU.pack(pady=(0, 10))
         self.CPUuso_lista = [0] * 100 
 
@@ -50,7 +50,7 @@ class InterfaceDashboard:
 
         # Gráfico da Memória
         tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold")).grid(row=0, column=0, sticky="n")
-        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=200, bg="dark gray")
+        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=230, bg="dark gray")
         self.GraficoMemoria.grid(row=1, column=0)
 
         # Gráfico de barra da Memória usada
