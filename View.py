@@ -173,9 +173,9 @@ class InterfaceDashboard:
         mem_total_mb = mem_total_kb / 1024
 
         # Altura total do canvas
-        altura_barra = 200
+        altura_barra = 150
 
-        canvas_largura = 100
+        canvas_largura = 200
         largura_barra = 70
         x_centro = (canvas_largura - largura_barra) / 2  # Centraliza a barra no Canvas
         # Altura proporcional usada
