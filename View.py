@@ -139,21 +139,26 @@ class InterfaceDashboard:
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="light blue", width=2)
 
         # grafico memoria
-        self.GraficoMemoria.delete("all")
 
+
+        self.GraficoMemoria.delete("all")
+        # Eixo Y (0% a 100%)
         for i in range(0, 101, 20):
             y = altura - (i / 100 * altura) + margem_y
             self.GraficoMemoria.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
-            self.GraficoMemoria.create_text(margem_x - 5, y, text=f"{i}%", anchor="e", fill="white", font=("Arial", 8))
+            self.GraficoMemoria.create_text(margem_x - 5, y,text=f"{i}%",anchor="e",fill="white",font=("Arial", 8))
 
+        # Eixo X (tempo decrescente de 500s até 0s, marcações a cada 25s)
         for i in range(0, 101, 10):
             x = margem_x + i * ((largura - margem_x) / 100)
-            tempo_seg = (100 - i) * intervalo_atualizacao
+            tempo_seg = (100 - i) * intervalo_atualizacao  # 100 pontos × 5s = 500s
+            # linhas de grade verticais
             self.GraficoMemoria.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
+            # rótulos de tempo (só a cada 25s)
             if tempo_seg % 25 == 0:
-                self.GraficoMemoria.create_text(x, altura + margem_y + 10, text=f"{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+                self.GraficoMemoria.create_text(x, altura + margem_y + 12,text=f"{tempo_seg}s",anchor="n",fill="white",font=("Arial", 8))
 
-        # Linhas do gráfico da Memória
+        # linhas do gráfico de memória
         for i in range(1, len(self.MEMuso_lista)):
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.MEMuso_lista))
             y1 = altura - (self.MEMuso_lista[i - 1] / 100 * altura) + margem_y
