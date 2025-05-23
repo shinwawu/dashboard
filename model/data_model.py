@@ -1,4 +1,3 @@
-import os
 import time
 
 
@@ -295,11 +294,17 @@ class SystemGlobalInfo:
 
         # Configurações do sistema
         # Obtém o valor de HZ (clock ticks por segundo) do sistema
-        try:
-            self.system_hz: int = os.sysconf(os.sysconf_names["SC_CLK_TCK"])
-        except (AttributeError, ValueError, OSError):
-            # Usa o valor padrão se não for possível obter o valor do sistema
-            self.system_hz = 100
+        with open("/proc/self/stat", "r") as f:
+            campos = f.read().split()
+            t1 = int(campos[13]) + int(campos[14])
+
+        time.sleep(1)
+
+        with open("/proc/self/stat", "r") as f:
+            campos = f.read().split()
+            t2 = int(campos[13]) + int(campos[14])
+
+        self.system_hz = round(t2 - t1)
 
         # Outras informações do sistema
         self.uptime_seconds: float = (
@@ -312,8 +317,8 @@ class SystemGlobalInfo:
         )  # Carga média (1, 5, 15 min)
 
         # Número de cores de CPU disponíveis
-        self.num_cores: int = (
-            os.cpu_count() or 1
+        with open("/proc/cpuinfo") as f:
+            self.num_cores = sum(1 for line in f if line.startswith("processor"))
         )  # Retorna 1 se os.cpu_count() retornar None
 
     def __repr__(self) -> str:
