@@ -319,7 +319,7 @@ class SystemGlobalInfo:
         # Número de cores de CPU disponíveis
         with open("/proc/cpuinfo") as f:
             self.num_cores = sum(1 for line in f if line.startswith("processor"))
-          # Retorna 1 se os.cpu_count() retornar None
+        
 
     def __repr__(self) -> str:
         """Retorna uma representação em string do objeto SystemGlobalInfo.
