@@ -27,10 +27,11 @@ class InterfaceDashboard:
         self.atualizacao_interface()
 
     def interface_aba_geral(self):
+        #Frame da aba geral
         frame_principal = tk.Frame(self.aba_geral,bg="gray15")
         frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # Gráficos e informações lado a lado usando grid
+        #Frame para graficos e informacoes lado a lado
         frame_grafico = tk.Frame(frame_principal,bg="gray15")
         frame_grafico.grid(row=0, column=0, sticky="n")
 
@@ -58,7 +59,7 @@ class InterfaceDashboard:
         self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=200, height=250, bg="dark gray")
         self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
         self.MEMuso_lista = [0] * 100
-
+        
         self.cpu_uso = tk.Label(frame_info, text="Uso da CPU: --%", font=("Arial", 14), bg="gray15", fg="white")
         self.cpu_uso.pack(pady=5)
         self.cpu_parado = tk.Label(frame_info, text="Tempo ocioso: --%", font=("Arial", 12), bg="gray15", fg="white")
@@ -89,9 +90,11 @@ class InterfaceDashboard:
         self.btn_detalhes.pack(pady=10)
 
     def atualizacao_interface(self):
+        #Pega informacoes geral do processador e dos processos
         info = self.controller.get_system_global_info()
         processos = self.controller.get_all_processes()
 
+        #Demonstra informacoes em texto para usuario
         self.cpu_uso.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
         self.cpu_parado.config(text=f"Tempo ocioso: {info.cpu_idle_percent:.2f}%")
         self.CPUuso_lista.append(info.cpu_usage_percent)
@@ -110,39 +113,39 @@ class InterfaceDashboard:
         margem_x = 35
         margem_y = 8
 
-        # === GRÁFICO DA CPU ===
+        #Gráfico da CPU
         self.GraficoCPU.delete("all")
-        for i in range(0, 101, 20):
+        for i in range(0, 101, 20):  #Eixo Y, cria a legenda 
             y = altura - (i / 100 * altura) + margem_y
             self.GraficoCPU.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
             self.GraficoCPU.create_text(margem_x - 5, y, text=f"{i}%", anchor="e", fill="white", font=("Arial", 8))
-        for i in range(0, len(self.CPUuso_lista), 10):
+        for i in range(0, len(self.CPUuso_lista), 10): #Eixo X, cria a legenda 
             x = margem_x + i * ((largura - margem_x) / len(self.CPUuso_lista))
             tempo_seg = (len(self.CPUuso_lista) - i) * intervalo_atualizacao
             self.GraficoCPU.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
             self.GraficoCPU.create_text(x, altura + margem_y - 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
 
-        for i in range(1, len(self.CPUuso_lista)):
+        for i in range(1, len(self.CPUuso_lista)): #Cria as linhas do grafico
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.CPUuso_lista))
             y1 = altura - (self.CPUuso_lista[i - 1] / 100 * altura) + margem_y
             x2 = margem_x + i * ((largura - margem_x) / len(self.CPUuso_lista))
             y2 = altura - (self.CPUuso_lista[i] / 100 * altura) + margem_y
             self.GraficoCPU.create_line(x1, y1, x2, y2, fill="light blue", width=2)
 
-        # === GRÁFICO DA MEMÓRIA ===
+        #Grafico de Memoria
         self.GraficoMemoria.delete("all")
-        for i in range(0, 101, 20):
+        for i in range(0, 101, 20):  #Eixo Y, cria a legenda 
             y = altura - (i / 100 * altura) + margem_y
             self.GraficoMemoria.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
             self.GraficoMemoria.create_text(margem_x - 5, y, text=f"{i}%", anchor="e", fill="white", font=("Arial", 8))
-        for i in range(0, len(self.MEMuso_lista), 10):
+        for i in range(0, len(self.MEMuso_lista), 10): #Eixo X, cria a legenda 
             x = margem_x + i * ((largura - margem_x) / len(self.MEMuso_lista))
             tempo_seg = (len(self.MEMuso_lista) - i) * intervalo_atualizacao
             self.GraficoMemoria.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
             self.GraficoMemoria.create_text(x, altura + margem_y - 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
 
 
-        for i in range(1, len(self.MEMuso_lista)):
+        for i in range(1, len(self.MEMuso_lista)): #Cria as linhas do grafico
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.MEMuso_lista))
             y1 = altura - (self.MEMuso_lista[i - 1] / 100 * altura) + margem_y
             x2 = margem_x + i * ((largura - margem_x) / len(self.MEMuso_lista))
@@ -153,10 +156,10 @@ class InterfaceDashboard:
        
        
         self.GraficoBarraMemoria.delete("all")
-        mem_usada_kb = info.mem_used_kb
+        mem_usada_kb = info.mem_used_kb  #pega as informacoes da memoria
         mem_total_kb = info.mem_total_kb
 
-        mem_usada_mb = mem_usada_kb / 1024
+        mem_usada_mb = mem_usada_kb / 1024  #converte para MB
         mem_total_mb = mem_total_kb / 1024
 
         # Dimensões do canvas
@@ -164,22 +167,22 @@ class InterfaceDashboard:
         canvas_largura = 200
         largura_barra = 70
 
-        # Altura proporcional (cresce de baixo para cima)
+        #calcula altura da barra
         if mem_total_mb > 0:
             altura_usada = (mem_usada_mb / mem_total_mb) * canvas_altura
         else:
             altura_usada = 0
 
-        # Coordenadas horizontais - centralizado
+        #coordenadas do grafico horizontal
         x_meio = canvas_largura / 2
         x0 = x_meio - largura_barra / 2
         x1 = x_meio + largura_barra / 2
 
-        # Coordenadas verticais - cresce a partir da base
-        y1 = canvas_altura  # base (eixo X, 0%)
-        y0 = y1 - altura_usada  # topo da barra
+        #coordenadas do grafico vertical
+        y1 = canvas_altura  
+        y0 = y1 - altura_usada  
 
-        # Cor da barra
+        #cor da barra
         mem_percent = info.mem_used_percent
         if mem_percent >= 90:
             cor = "red"
@@ -188,23 +191,23 @@ class InterfaceDashboard:
         else:
             cor = "light blue"
 
-        # Desenha a barra
+        #desenha a barra
         self.GraficoBarraMemoria.create_rectangle(x0, y0, x1, y1, fill=cor)
 
-        # Texto acima da barra
+        #informa quantos MB estao sendo utilizados
         texto_mem = f"{mem_usada_mb:.1f} MB / {mem_total_mb:.1f} MB"
         self.GraficoBarraMemoria.create_text(canvas_largura / 2, y0 - 10, text=texto_mem, fill="white", font=("Arial", 8), anchor="s")
 
 
         
-            
+        #atualiza a listadeprocessos
         for i in self.listaprocessos.get_children():
             self.listaprocessos.delete(i)
         for proc in sorted(processos, key=lambda p: p.cpu_percent, reverse=True):
             self.listaprocessos.insert("", "end", values=(
                 proc.pid, proc.user, f"{proc.cpu_percent:.2f}%", f"{proc.mem_percent:.2f}%", proc.cmdline[:80]
             ))
-
+        #atualiza a cada 5s a interface
         self.Dashboard.after(5000, self.atualizacao_interface)
 
     def ver_detalhes(self):
@@ -212,20 +215,20 @@ class InterfaceDashboard:
         if not selected:
             messagebox.showwarning("Selecao", "Selecione um processo na lista.")
             return
-
+        #as informacoes do processo detalhado
         pid = int(self.listaprocessos.item(selected[0], "values")[0])
         proc = self.controller.get_process_by_pid(pid)
         threads = self.controller.load_and_get_threads_for_process(pid)
-
+        #janela nova
         janela_detalhes = tk.Toplevel(self.Dashboard)
         janela_detalhes.title(f"Detalhes do Processo PID {pid}")
         janela_detalhes.geometry("600x400")
-
+        #as informacoes dos processos
         tk.Label(janela_detalhes, text=f"Usuario: {proc.user}").pack()
         tk.Label(janela_detalhes, text=f"CPU %: {proc.cpu_percent:.2f} | Mem %: {proc.mem_percent:.2f}").pack()
         tk.Label(janela_detalhes, text=f"Inicio: {proc.start_time_str}").pack()
         tk.Label(janela_detalhes, text=f"Comando: {proc.cmdline}").pack()
-
+        #informacoes dos threads
         tk.Label(janela_detalhes, text=f"Threads:").pack(pady=5)
         listathreads = ttk.Treeview(janela_detalhes, columns=("TID", "Nome", "Estado"), show="headings")
         for col in ("TID", "Nome", "Estado"):
@@ -235,7 +238,7 @@ class InterfaceDashboard:
             listathreads.insert("", "end", values=(thr.tid, thr.name, thr.state))
         listathreads.pack(expand=True, fill="both")
 
-
+#inicializacao da main
 if __name__ == "__main__":
     root = tk.Tk()
     root.configure(bg="gray15")
