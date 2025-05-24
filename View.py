@@ -25,55 +25,53 @@ class InterfaceDashboard:
         self.interface_aba_geral()  
         self.interface_processos_aba()
         self.atualizacao_interface()
-
     def interface_aba_geral(self):
-        #Frame da aba geral
-        frame_principal = tk.Frame(self.aba_geral,bg="gray15")
+        # Frame principal da aba geral
+        frame_principal = tk.Frame(self.aba_geral, bg="gray15")
         frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
 
-        #Frame para graficos e informacoes lado a lado
-        frame_grafico = tk.Frame(frame_principal,bg="gray15")
-        frame_grafico.grid(row=0, column=0, sticky="n")
+        # Frame de gráficos em grade
+        frame_grafico = tk.Frame(frame_principal, bg="gray15")
+        frame_grafico.grid(row=0, column=0, sticky="nw")
 
-        frame_info = tk.Frame(frame_principal,bg="gray15")
-        frame_info.grid(row=0, column=1, sticky="n")
+        frame_info = tk.Frame(frame_principal, bg="gray15")
+        frame_info.grid(row=0, column=1, sticky="ne")
 
-        #Gráfico da CPU
-        tk.Label(frame_grafico, text="Uso da CPU", font=("Arial", 12, "bold"), bg="gray15", fg="white").pack()
+        # Gráfico da CPU
+        self.label_titulo_cpu = tk.Label(frame_grafico, text="Uso da CPU: --%", font=("Arial", 12, "bold"), bg="gray15", fg="white")
+        self.label_titulo_cpu.grid(row=0, column=0)
         self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
-        self.GraficoCPU.pack(pady=(0, 10))
-        self.CPUuso_lista = [0] * 100 
+        self.GraficoCPU.grid(row=1, column=0, padx=5, pady=5)
+        self.CPUuso_lista = [0] * 100
 
-
-        # Frame horizontal para o gráfico de memória e barra de memória total
-        frame_memoria = tk.Frame(frame_grafico,bg="gray15")
-        frame_memoria.pack()
+        # Gráfico de Processos
+        self.label_titulo_processos = tk.Label(frame_grafico, text="Total de Processos: --", font=("Arial", 12, "bold"), bg="gray15", fg="white")
+        self.label_titulo_processos.grid(row=0, column=1)
+        self.GraficoProcessos = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
+        self.GraficoProcessos.grid(row=1, column=1, padx=5, pady=5)
+        self.processos_lista = [0] * 100
 
         # Gráfico da Memória
-        tk.Label(frame_memoria, text="Uso da Memória (%)", font=("Arial", 12, "bold"), bg="gray15", fg="white").grid(row=0, column=0, sticky="n")
-        self.GraficoMemoria = tk.Canvas(frame_memoria, width=400, height=250, bg="dark gray")
-        self.GraficoMemoria.grid(row=1, column=0)
-
-        # Gráfico de barra da Memória usada
-        tk.Label(frame_memoria, text="Memória Usada", font=("Arial", 12, "bold"), bg="gray15", fg="white").grid(row=0, column=1, sticky="n")
-        self.GraficoBarraMemoria = tk.Canvas(frame_memoria, width=200, height=250, bg="dark gray")
-        self.GraficoBarraMemoria.grid(row=1, column=1, padx=10)
+        self.label_titulo_memoria = tk.Label(frame_grafico, text="Uso da Memória: --%", font=("Arial", 12, "bold"), bg="gray15", fg="white")
+        self.label_titulo_memoria.grid(row=2, column=0)
+        self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
+        self.GraficoMemoria.grid(row=3, column=0, padx=5, pady=5)
         self.MEMuso_lista = [0] * 100
-        
-        self.cpu_uso = tk.Label(frame_info, text="Uso da CPU: --%", font=("Arial", 14), bg="gray15", fg="white")
-        self.cpu_uso.pack(pady=5)
-        self.cpu_parado = tk.Label(frame_info, text="Tempo ocioso: --%", font=("Arial", 12), bg="gray15", fg="white")
-        self.cpu_parado.pack()
 
-        self.memo_uso = tk.Label(frame_info, text="Uso de Memoria: --%", font=("Arial", 12), bg="gray15", fg="white")
-        self.memo_uso.pack()
-        self.swap_uso = tk.Label(frame_info, text="Uso de Swap: --%", font=("Arial", 12), bg="gray15", fg="white")
-        self.swap_uso.pack()
+        # Gráfico de Threads
+        self.label_titulo_threads = tk.Label(frame_grafico, text="Total de Threads: --", font=("Arial", 12, "bold"), bg="gray15", fg="white")
+        self.label_titulo_threads.grid(row=2, column=1)
+        self.GraficoThreads = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
+        self.GraficoThreads.grid(row=3, column=1, padx=5, pady=5)
+        self.threads_lista = [0] * 100
 
-        self.processos_num = tk.Label(frame_info, text="Total de Processos: --", font=("Arial", 12), bg="gray15", fg="white")
-        self.processos_num.pack()
-        self.threads_num = tk.Label(frame_info, text="Total de Threads: --", font=("Arial", 12), bg="gray15", fg="white")
-        self.threads_num.pack()
+        # Gráfico de Barra de Memória (memória usada)
+        tk.Label(frame_grafico, text="Memória Usada", font=("Arial", 12, "bold"), bg="gray15", fg="white").grid(row=0, column=2)
+        self.GraficoBarraMemoria = tk.Canvas(frame_grafico, width=200, height=250, bg="dark gray")
+        self.GraficoBarraMemoria.grid(row=1, column=2, rowspan=3, padx=5, pady=5, sticky="n")
+
+
+
 
 
 
@@ -95,16 +93,20 @@ class InterfaceDashboard:
         processos = self.controller.get_all_processes()
 
         #Demonstra informacoes em texto para usuario
-        self.cpu_uso.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
-        self.cpu_parado.config(text=f"Tempo ocioso: {info.cpu_idle_percent:.2f}%")
+        self.label_titulo_cpu.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
+        
         self.CPUuso_lista.append(info.cpu_usage_percent)
         self.CPUuso_lista.pop(0)
         self.MEMuso_lista.append(info.mem_used_percent)
+        self.label_titulo_memoria.config(text=f"Uso da Memória: {info.mem_used_percent:.2f}%")
         self.MEMuso_lista.pop(0)
-        self.memo_uso.config(text=f"Uso de Memoria: {info.mem_used_percent:.2f}%")
-        self.swap_uso.config(text=f"Uso de Swap: {info.swap_used_percent:.2f}%")
-        self.processos_num.config(text=f"Total de Processos: {info.total_processes}")
-        self.threads_num.config(text=f"Total de Threads: {info.total_threads}")
+        self.processos_lista.append(info.total_processes)
+        self.processos_lista.pop(0)
+        self.threads_lista.append(info.total_threads)
+        self.threads_lista.pop(0)
+        self.label_titulo_processos.config(text=f"Total de Processos: {info.total_processes}")
+        self.label_titulo_threads.config(text=f"Total de Threads: {info.total_threads}")
+
 
         altura = 230
         largura = 400
@@ -123,7 +125,7 @@ class InterfaceDashboard:
             x = margem_x + i * ((largura - margem_x) / len(self.CPUuso_lista))
             tempo_seg = (len(self.CPUuso_lista) - i) * intervalo_atualizacao
             self.GraficoCPU.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
-            self.GraficoCPU.create_text(x, altura + margem_y - 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+            self.GraficoCPU.create_text(x, altura + margem_y + 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
 
         for i in range(1, len(self.CPUuso_lista)): #Cria as linhas do grafico
             x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.CPUuso_lista))
@@ -142,7 +144,7 @@ class InterfaceDashboard:
             x = margem_x + i * ((largura - margem_x) / len(self.MEMuso_lista))
             tempo_seg = (len(self.MEMuso_lista) - i) * intervalo_atualizacao
             self.GraficoMemoria.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
-            self.GraficoMemoria.create_text(x, altura + margem_y - 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+            self.GraficoMemoria.create_text(x, altura + margem_y + 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
 
 
         for i in range(1, len(self.MEMuso_lista)): #Cria as linhas do grafico
@@ -151,6 +153,54 @@ class InterfaceDashboard:
             x2 = margem_x + i * ((largura - margem_x) / len(self.MEMuso_lista))
             y2 = altura - (self.MEMuso_lista[i] / 100 * altura) + margem_y
             self.GraficoMemoria.create_line(x1, y1, x2, y2, fill="light green", width=2)
+        
+        # === GRÁFICO DE PROCESSOS ===
+        self.GraficoProcessos.delete("all")
+        max_proc = max(self.processos_lista) or 1
+
+        for i in range(0, max_proc + 1, max(1, max_proc // 10)):
+            y = altura - (i / max_proc * altura) + margem_y
+            self.GraficoProcessos.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
+            self.GraficoProcessos.create_text(margem_x - 5, y, text=str(i), anchor="e", fill="white", font=("Arial", 8))
+        # Eixo X do gráfico de processos
+        for i in range(0, len(self.processos_lista), 10):
+            x = margem_x + i * ((largura - margem_x) / len(self.processos_lista))
+            tempo_seg = (len(self.processos_lista) - i) * intervalo_atualizacao
+            self.GraficoProcessos.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
+            self.GraficoProcessos.create_text(x, altura + margem_y + 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+
+
+        for i in range(1, len(self.processos_lista)):
+            x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.processos_lista))
+            y1 = altura - (self.processos_lista[i - 1] / max_proc * altura) + margem_y
+            x2 = margem_x + i * ((largura - margem_x) / len(self.processos_lista))
+            y2 = altura - (self.processos_lista[i] / max_proc * altura) + margem_y
+            self.GraficoProcessos.create_line(x1, y1, x2, y2, fill="cyan", width=2)
+
+
+        # === GRÁFICO DE THREADS ===
+        self.GraficoThreads.delete("all")
+        max_thr = max(self.threads_lista) or 1
+
+        for i in range(0, max_thr + 1, max(1, max_thr // 10)):
+            y = altura - (i / max_thr * altura) + margem_y
+            self.GraficoThreads.create_line(margem_x, y, largura, y, fill="lightgray", dash=(2, 2))
+            self.GraficoThreads.create_text(margem_x - 5, y, text=str(i), anchor="e", fill="white", font=("Arial", 8))
+        # Eixo X do gráfico de threads
+        for i in range(0, len(self.threads_lista), 10):
+            x = margem_x + i * ((largura - margem_x) / len(self.threads_lista))
+            tempo_seg = (len(self.threads_lista) - i) * intervalo_atualizacao
+            self.GraficoThreads.create_line(x, margem_y, x, altura + margem_y, fill="lightgray", dash=(2, 2))
+            self.GraficoThreads.create_text(x, altura + margem_y + 2, text=f"-{tempo_seg}s", anchor="n", fill="white", font=("Arial", 8))
+
+
+        for i in range(1, len(self.threads_lista)):
+            x1 = margem_x + (i - 1) * ((largura - margem_x) / len(self.threads_lista))
+            y1 = altura - (self.threads_lista[i - 1] / max_thr * altura) + margem_y
+            x2 = margem_x + i * ((largura - margem_x) / len(self.threads_lista))
+            y2 = altura - (self.threads_lista[i] / max_thr * altura) + margem_y
+            self.GraficoThreads.create_line(x1, y1, x2, y2, fill="magenta", width=2)
+
 
         # grafico memoria usada
        
