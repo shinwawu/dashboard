@@ -57,6 +57,8 @@ class InterfaceDashboard:
         self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
         self.GraficoMemoria.grid(row=3, column=0, padx=5, pady=5)
         self.MEMuso_lista = [0] * 100
+        self.label_swap_info = tk.Label(frame_grafico,text="Swap Usado: -- MB",font=("Arial", 10),bg="gray15",fg="white")
+        self.label_swap_info.grid(row=4, column=0)
 
         #criando os graficos de threads
         self.label_titulo_threads = tk.Label(frame_grafico, text="Total de Threads: --", font=("Arial", 12, "bold"), bg="gray15", fg="white")
@@ -64,9 +66,22 @@ class InterfaceDashboard:
         self.GraficoThreads = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
         self.GraficoThreads.grid(row=3, column=1, padx=5, pady=5)
         self.threads_lista = [0] * 100
+        
+        #tabela de estatisticas
+        frame_estat = tk.Frame(frame_grafico, bg="gray15")
+        frame_estat.grid(row=0, column=3, rowspan=4, sticky="ns", padx=10)
+
+        tk.Label(frame_estat, text="Estatísticas", font=("Arial", 12, "bold"), bg="gray15", fg="white").pack(pady=(0, 10))
+
+        self.estat_tabela = ttk.Treeview(frame_estat,columns=("Grafico", "Min", "Max", "Media", "Atual"),show="headings",height=11)
+        for col in ("Grafico", "Min", "Max", "Media", "Atual"):
+            self.estat_tabela .heading(col, text=col)
+            self.estat_tabela .column(col, anchor="center", width=80)
+        self.estat_tabela .pack()
 
         #criando o gráfico de memoria usada
-        tk.Label(frame_grafico, text="Memória Usada", font=("Arial", 12, "bold"), bg="gray15", fg="white").grid(row=0, column=2)
+        self.label_titulo_mem_barra = tk.Label(frame_grafico,text="Memória Usada",font=("Arial", 12, "bold"),bg="gray15",fg="white")
+        self.label_titulo_mem_barra.grid(row=0, column=2)
         self.GraficoBarraMemoria = tk.Canvas(frame_grafico, width=200, height=250, bg="dark gray")
         self.GraficoBarraMemoria.grid(row=1, column=2, rowspan=3, padx=5, pady=5, sticky="n")
 
@@ -93,14 +108,17 @@ class InterfaceDashboard:
         processos = self.controller.get_all_processes()
 
         #Demonstra informacoes em texto para usuario
-        self.label_titulo_cpu.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
+        self.label_titulo_cpu.config(
+    text=f"Uso da CPU: {info.cpu_usage_percent:.2f}% | Ocioso: {info.cpu_idle_percent:.2f}%"
+)
 
         #aqui estamos atualizando a lista de cada grafico
         self.CPUuso_lista.append(info.cpu_usage_percent)
         self.CPUuso_lista.pop(0)
         self.MEMuso_lista.append(info.mem_used_percent)
-        self.label_titulo_memoria.config(text=f"Uso da Memória: {info.mem_used_percent:.2f}%")
+        self.label_titulo_memoria.config(text=f"Uso da Memória: {info.mem_used_percent:.2f}% | Livre: {100 - info.mem_used_percent:.2f}%")
         self.MEMuso_lista.pop(0)
+        self.label_swap_info.config(text=f"Swap Usado: {info.swap_used_kb / 1024:.2f} MB")
         self.processos_lista.append(info.total_processes)
         self.processos_lista.pop(0)
         self.threads_lista.append(info.total_threads)
@@ -212,7 +230,7 @@ class InterfaceDashboard:
 
         mem_usada_mb = mem_usada_kb / 1024  #converte para MB
         mem_total_mb = mem_total_kb / 1024
-
+        self.label_titulo_mem_barra.config(text=f"Memória Usada: {mem_usada_mb:.1f} MB / {mem_total_mb:.1f} MB")
         # Dimensões do canvas
         canvas_altura = 250
         canvas_largura = 200
@@ -258,6 +276,29 @@ class InterfaceDashboard:
             self.listaprocessos.insert("", "end", values=(
                 proc.pid, proc.user, f"{proc.cpu_percent:.2f}%", f"{proc.mem_percent:.2f}%", proc.cmdline[:80]
             ))
+            
+        #tabela de estatisticas
+        self.estat_tabela.delete(*self.estat_tabela.get_children())
+
+        def calc_estat(nome, lista):
+            # Remove apenas os zeros iniciais
+            i = 0
+            while i < len(lista) and lista[i] == 0:
+                i += 1
+            valores_validos = lista[i:]
+            if not valores_validos:
+                return (nome, "-", "-", "-", "-")
+            return(nome,f"{min(valores_validos):.2f}",f"{max(valores_validos):.2f}",f"{sum(valores_validos)/len(valores_validos):.2f}",f"{lista[-1]:.2f}")
+
+
+        for nome, lista in [
+            ("CPU (%)", self.CPUuso_lista),
+            ("Mem (%)", self.MEMuso_lista),
+            ("Procs", self.processos_lista),
+            ("Threads", self.threads_lista),
+        ]:
+            self.estat_tabela.insert("", "end", values=calc_estat(nome, lista))
+
         #atualiza a cada 5s a interface
         self.Dashboard.after(5000, self.atualizacao_interface)
 
