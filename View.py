@@ -26,46 +26,46 @@ class InterfaceDashboard:
         self.interface_processos_aba()
         self.atualizacao_interface()
     def interface_aba_geral(self):
-        # Frame principal da aba geral
+        #frame principal da aba geral
         frame_principal = tk.Frame(self.aba_geral, bg="gray15")
         frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # Frame de gráficos em grade
+        #frame de gráficos em grade
         frame_grafico = tk.Frame(frame_principal, bg="gray15")
         frame_grafico.grid(row=0, column=0, sticky="nw")
 
         frame_info = tk.Frame(frame_principal, bg="gray15")
         frame_info.grid(row=0, column=1, sticky="ne")
 
-        # Gráfico da CPU
+        #criando o gráfico da CPU
         self.label_titulo_cpu = tk.Label(frame_grafico, text="Uso da CPU: --%", font=("Arial", 12, "bold"), bg="gray15", fg="white")
         self.label_titulo_cpu.grid(row=0, column=0)
         self.GraficoCPU = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
         self.GraficoCPU.grid(row=1, column=0, padx=5, pady=5)
         self.CPUuso_lista = [0] * 100
 
-        # Gráfico de Processos
+        #criando o gráfico de processos
         self.label_titulo_processos = tk.Label(frame_grafico, text="Total de Processos: --", font=("Arial", 12, "bold"), bg="gray15", fg="white")
         self.label_titulo_processos.grid(row=0, column=1)
         self.GraficoProcessos = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
         self.GraficoProcessos.grid(row=1, column=1, padx=5, pady=5)
         self.processos_lista = [0] * 100
 
-        # Gráfico da Memória
+        #criando o gráfico de memoria
         self.label_titulo_memoria = tk.Label(frame_grafico, text="Uso da Memória: --%", font=("Arial", 12, "bold"), bg="gray15", fg="white")
         self.label_titulo_memoria.grid(row=2, column=0)
         self.GraficoMemoria = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
         self.GraficoMemoria.grid(row=3, column=0, padx=5, pady=5)
         self.MEMuso_lista = [0] * 100
 
-        # Gráfico de Threads
+        #criando os graficos de threads
         self.label_titulo_threads = tk.Label(frame_grafico, text="Total de Threads: --", font=("Arial", 12, "bold"), bg="gray15", fg="white")
         self.label_titulo_threads.grid(row=2, column=1)
         self.GraficoThreads = tk.Canvas(frame_grafico, width=400, height=250, bg="dark gray")
         self.GraficoThreads.grid(row=3, column=1, padx=5, pady=5)
         self.threads_lista = [0] * 100
 
-        # Gráfico de Barra de Memória (memória usada)
+        #criando o gráfico de memoria usada
         tk.Label(frame_grafico, text="Memória Usada", font=("Arial", 12, "bold"), bg="gray15", fg="white").grid(row=0, column=2)
         self.GraficoBarraMemoria = tk.Canvas(frame_grafico, width=200, height=250, bg="dark gray")
         self.GraficoBarraMemoria.grid(row=1, column=2, rowspan=3, padx=5, pady=5, sticky="n")
@@ -94,7 +94,8 @@ class InterfaceDashboard:
 
         #Demonstra informacoes em texto para usuario
         self.label_titulo_cpu.config(text=f"Uso da CPU: {info.cpu_usage_percent:.2f}%")
-        
+
+        #aqui estamos atualizando a lista de cada grafico
         self.CPUuso_lista.append(info.cpu_usage_percent)
         self.CPUuso_lista.pop(0)
         self.MEMuso_lista.append(info.mem_used_percent)
@@ -154,7 +155,7 @@ class InterfaceDashboard:
             y2 = altura - (self.MEMuso_lista[i] / 100 * altura) + margem_y
             self.GraficoMemoria.create_line(x1, y1, x2, y2, fill="light green", width=2)
         
-        # === GRÁFICO DE PROCESSOS ===
+        #grafico de processos
         self.GraficoProcessos.delete("all")
         max_proc = max(self.processos_lista) or 1
 
