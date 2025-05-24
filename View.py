@@ -305,30 +305,52 @@ class InterfaceDashboard:
     def ver_detalhes(self):
         selected = self.listaprocessos.selection()
         if not selected:
-            messagebox.showwarning("Selecao", "Selecione um processo na lista.")
+            messagebox.showwarning("Seleção", "Selecione um processo na lista.")
             return
-        #as informacoes do processo detalhado
+
         pid = int(self.listaprocessos.item(selected[0], "values")[0])
         proc = self.controller.get_process_by_pid(pid)
         threads = self.controller.load_and_get_threads_for_process(pid)
-        #janela nova
+
+        # Cria nova janela para os detalhes
         janela_detalhes = tk.Toplevel(self.Dashboard)
         janela_detalhes.title(f"Detalhes do Processo PID {pid}")
-        janela_detalhes.geometry("600x400")
-        #as informacoes dos processos
-        tk.Label(janela_detalhes, text=f"Usuario: {proc.user}").pack()
-        tk.Label(janela_detalhes, text=f"CPU %: {proc.cpu_percent:.2f} | Mem %: {proc.mem_percent:.2f}").pack()
-        tk.Label(janela_detalhes, text=f"Inicio: {proc.start_time_str}").pack()
-        tk.Label(janela_detalhes, text=f"Comando: {proc.cmdline}").pack()
-        #informacoes dos threads
-        tk.Label(janela_detalhes, text=f"Threads:").pack(pady=5)
-        listathreads = ttk.Treeview(janela_detalhes, columns=("TID", "Nome", "Estado"), show="headings")
+        janela_detalhes.geometry("750x600")
+        janela_detalhes.configure(bg="gray15")
+
+        #Frame com informações principais
+        frame_info = tk.Frame(janela_detalhes, bg="gray15")
+        frame_info.pack(padx=10, pady=10, anchor="w", fill="x")
+
+        tk.Label(frame_info, text=f"Usuário: {proc.user}", bg="gray15", fg="white").pack(anchor="w")
+        tk.Label(frame_info, text=f"CPU %: {proc.cpu_percent:.2f} | Mem %: {proc.mem_percent:.2f}", bg="gray15", fg="white").pack(anchor="w")
+        tk.Label(frame_info, text=f"Início: {proc.start_time_str}", bg="gray15", fg="white").pack(anchor="w")
+        tk.Label(frame_info, text=f"Comando: {proc.cmdline}", bg="gray15", fg="white", wraplength=700, justify="left").pack(anchor="w")
+
+        # Frame com informações de memória detalhadas
+        frame_memoria = tk.LabelFrame(janela_detalhes,text="Uso de Memória (em KB)",bg="gray15",fg="white",font=("Arial", 10, "bold"))
+        frame_memoria.pack(fill="x", padx=10, pady=10)
+
+        campos_mem = [("Memória Virtual Total (VmSize)", proc.vm_size_kb),("Memória Física (VmRSS)", proc.vm_rss_kb),("Pico de Memória Virtual (VmPeak)", proc.vm_peak_kb),("Memória do Código (VmExe)", proc.vm_exe_kb),("Heap / Dados (VmData)", proc.vm_data_kb),("Pilha (VmStk)", proc.vm_stk_kb),("Bibliotecas Compartilhadas (VmLib)", proc.vm_lib_kb),("Memória em Swap (VmSwap)", proc.vm_swap_kb),("Tamanho Tabelas de Página (VmPTE)", proc.vm_pte_kb),]
+
+        for nome, valor in campos_mem:
+            tk.Label(frame_memoria, text=f"{nome}: {valor} KB", bg="gray15", fg="white").pack(anchor="w")
+
+        # Frame com lista de threads
+        tk.Label(janela_detalhes,text="Threads:",bg="gray15",fg="white",font=("Arial", 10, "bold")).pack(pady=(10, 0), anchor="w", padx=10)
+
+        listathreads = ttk.Treeview(janela_detalhes,columns=("TID", "Nome", "Estado"),show="headings")
+
         for col in ("TID", "Nome", "Estado"):
             listathreads.heading(col, text=col)
-            listathreads.column(col, width=150, anchor='center')
+            listathreads.column(col, width=200 if col == "Nome" else 100, anchor='center')
+
         for thr in threads:
             listathreads.insert("", "end", values=(thr.tid, thr.name, thr.state))
-        listathreads.pack(expand=True, fill="both")
+
+        listathreads.pack(expand=True, fill="both", padx=10, pady=(0, 10))
+
+
 
 #inicializacao da main
 if __name__ == "__main__":
