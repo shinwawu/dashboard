@@ -1,0 +1,6 @@
+# requirements.txt
+# Nenhuma dependência externa obrigatória além da biblioteca padrão do Python
+
+# Tkinter já vem com Python completo
+# Caso necessário (ex: em Linux mínimo), instale com:
+# sudo apt install python3-tk
